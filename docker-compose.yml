@@ -1,0 +1,21 @@
+services:
+  api-gateway-mvp:
+    image: thiagomag/api-gateway-mvp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - mvp-network
+    container_name: api-gateway-mvp
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      NASA_BACKEND_SERVICE_PATH: http://nasa-api-backend:8080
+
+volumes:
+  postgres_data:
+
+networks:
+  mvp-network:
+    external: true

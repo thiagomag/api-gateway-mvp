@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway-mvp
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth_service
+              uri: ${AUTH_SERVICE_PATH:http://localhost:8081}
+              predicates:
+                - Path=/auth-service/**
+              filters:
+                - RewritePath=/auth-service/(?<remaining>.*), /${remaining}
+
+jwt:
+  secret: 4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4PT
+
+api:
+  keys:
+    validApiKeys:
+      - RXN0YSDDqSBhIGFwaS1rZXkgZG8gY2FkYXN0cm8tdXN1YXJpb3Mtc2VydmljZQ==
+      - RXN0YSDDqSBhIGFwaS1rZXkgZG8gbm90aWZpY2FjYW8tc2VydmljZQ==
+      - RXN0YSDDqSBhIGFwaS1rZXkgZG8gbWVkaWNhbWVudG9zLXNlcnZpY2U=
+      - RXN0YSDDqSBhIGFwaS1rZXkgZG8gZm9ybmVjZWRvci1zZXJ2aWNl
+
+logging:
+  level:
+    root: INFO
+    com.postgraduates.gateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    io.jsonwebtoken: INFO
+
+security:
+  post-public-paths:
+    - "/auth-service/users"
+    - "/auth-service/users/login"
+  public-paths:
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
+    - "/webjars/**"
+    - "/swagger-resources/**"
+    - "/.well-known/appspecific/com.chrome.devtools.json"
+    - "/favicon.ico"
+    - "/assets/"
