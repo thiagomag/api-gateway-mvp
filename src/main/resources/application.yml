@@ -15,6 +15,12 @@ spring:
                 - Path=/auth-service/**
               filters:
                 - RewritePath=/auth-service/(?<remaining>.*), /${remaining}
+            - id: course_service
+              uri: ${COURSE_SERVICE_PATH:http://localhost:8082}
+              predicates:
+                - Path=/course-service/**
+              filters:
+                - RewritePath=/course-service/(?<remaining>.*), /${remaining}
 
 jwt:
   secret: 4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4PT
