@@ -82,11 +82,22 @@ public class JwtAuthenticationFilter implements WebFilter {
             String userId = extractUserId(claims);
             List<String> roles = extractRoles(claims);
 
+            String subscriptionStatus = claims.get("subscription_status", String.class);
+            if (subscriptionStatus == null) {
+                subscriptionStatus = "INACTIVE";
+            }
+
+            if (path.startsWith("/course-service/") && !"ACTIVE".equals(subscriptionStatus)) {
+                log.warn("Acesso negado para o User ID: '{}' ao path '{}' devido ao status de assinatura: {}", userId, path, subscriptionStatus);
+                return onError(exchange, "Acesso negado. Assinatura não está ativa.", HttpStatus.FORBIDDEN);
+            }
+
             log.info("JWT valido para o User ID: '{}', Roles: '{}' no caminho: {}", userId, String.join(",", roles), path);
 
             ServerHttpRequest mutatedRequest = request.mutate()
                     .header("X-User-Id", userId)
                     .header("X-User-Roles", String.join(",", roles))
+                    .header("X-Subscription-Status", subscriptionStatus)
                     .build();
 
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
