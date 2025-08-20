@@ -131,7 +131,8 @@ public class JwtAuthenticationFilter implements WebFilter {
     }
 
     private boolean isPublicRoute(String path, ServerHttpRequest request) {
-        if (postPublicPatterns.stream().anyMatch(pattern -> pattern.matches(PathContainer.parsePath(path))) && request.getMethod().matches("POST")) {
+        if (postPublicPatterns.stream().anyMatch(pattern -> pattern.matches(PathContainer.parsePath(path))) &&
+                (request.getMethod().matches("POST")) || request.getMethod().matches("OPTIONS")) {
             return true;
         }
         return publicPatterns.stream().anyMatch(pattern -> pattern.matches(PathContainer.parsePath(path)));
