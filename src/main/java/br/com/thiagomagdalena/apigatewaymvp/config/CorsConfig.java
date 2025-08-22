@@ -16,7 +16,7 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         // Permite requisições da sua aplicação Vue. Use "*" para desenvolvimento se preferir.
-        corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:5174"));
+        corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
         corsConfig.setMaxAge(3600L); // Tempo que o navegador pode cachear a resposta preflight
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         corsConfig.addAllowedHeader("*"); // Permite todos os headers
